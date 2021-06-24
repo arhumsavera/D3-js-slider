@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>590V: The World Over Time </title>
+
+<body>
+
+<style type='text/css'>
+  .button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+</style>
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <!-- I recommend you host this file on your own, since this will change without warning -->
+  <script src="http://datamaps.github.io/scripts/datamaps.world.min.js?v=1"></script>
+  <div>
+  <div style="float:left"> 
+  	<h1>WORLD MAP STATISTICS:   </h1>
+  </div>
+  <div style="float:center; padding: 20px"> 
+	  <select id = 'search' onChange="changedata()" style="font-size:30px">
+		  <option value="lifeexpectancy">Life Expectancy</option>
+		  <option value="gdp_growth">GDP Growth</option>
+		  <option value="meanyearsinschool">Mean Years in School</option>
+		  <!-- <option value="population">Population</option> -->
+		  <option value="co2">CO2 Emissions</option>
+		  <option value="electricity">Electricity Usage per Person</option>
+	  </select>
+  </div>
+  <div style="float:right; padding-right: 70px" ><button class="button button1" onClick="window.location.href='/index.html';">Graph View</button>
+</div>
+</div>
+
+  <div id="container1" style="position: relative; width: 80%; max-height: 450px;"></div>
+     
+     <script>
+      // function updateData() {
+      //   csv_file = 'data.csv'
+      //   map.updateChoropleth(csv_file)
+      // }
+       //basic map config with custom fills, mercator projection
+      var csv_file = 'lifeexpectancy.csv'
+      var geoConfig = {
+              popupTemplate: function(geo, data) {
+                return data && "<div class='hoverinfo' style='font-size:15px'><div><strong>" + geo.properties.name+ "</strong></div><div><strong>Value: "+ data.value + "</strong></div></div>";
+              },
+              highlightOnHover: false,
+              borderColor: '#444',
+              borderWidth: 0.5
+        }
+      
+      var fillColor = {
+          '1.0': '#fff7ec',
+          '2.0': '#fee8c8',
+          '3.0': '#fdd49e',
+          '4.0': '#fdbb84',
+          '5.0': '#fc8d59',
+          '6.0': '#ef6548',
+          '7.0': '#d7301f',
+          '8.0': '#b30000',
+          '9.0': '#7f0000',
+          '0.0': '#FFF9F1',
+          defaultFill: 'white'
+        }
+      map = new Datamap({
+        scope: 'world',
+        element: document.getElementById('container1'),
+        projection: 'mercator',
+        height: 600,
+        geographyConfig: geoConfig,
+        dataUrl: csv_file,
+        dataType: 'csv',
+        data: {},
+
+        fills: fillColor
+      });
+      var changedata = function() {
+        console.log(document.getElementById('search').value)
+        document.getElementById('search').value
+        document.getElementById('container1').innerHTML = ""
+        csv_file = document.getElementById('search').value + '.csv'
+        map = new Datamap({
+        scope: 'world',
+        element: document.getElementById('container1'),
+        projection: 'mercator',
+        height: 600,
+        
+        geographyConfig: geoConfig,
+        dataUrl: csv_file,
+        dataType: 'csv',
+        data: {},
+
+        fills: fillColor
+      });
+      }
+      
+     </script>
+
+
+
+
+</body>
